@@ -103,7 +103,7 @@ controller.get("/tareas/modificar/:id", (req, res) => {
         database: 'mydb'
     });
 
-  
+
 
     pool.query(`SELECT * from tarea where (id=${req.params.id})`, function (error, results, fields) {
         if (error) throw error;
@@ -114,14 +114,34 @@ controller.get("/tareas/modificar/:id", (req, res) => {
             if (error) throw error;
             console.log('The solution is: ', results);
             res.render("modificarTareas", {
-                prioridades: results, 
+                prioridades: results,
                 tarea: tarea
             }); //le paso las prioridades y la tarea a la vista nuevasTareas
         });
     });
 
 
-   
+
+})
+
+controller.get("/tareas/eliminar/:id", (req, res) => {
+
+    var mysql = require('mysql');
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'admin',
+        database: 'mydb'
+    });
+
+    connection.connect();
+
+    connection.query(`DELETE from tarea where (id=${req.params.id})`, function (error, results, fields) {
+        if (error) throw error;
+        console.log('The solution is: ', results);
+        res.redirect("/tareas");
+    });
+    connection.end();
 })
 
 
